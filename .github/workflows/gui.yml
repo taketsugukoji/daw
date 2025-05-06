@@ -14,10 +14,13 @@ jobs:
         with:
           node-version: 18
       - name: Install dependencies
+        working-directory: gui
         run: npm ci
 
       - name: Run ESLint
+        working-directory: gui
         run: npm run lint
 
       - name: Run Prettier Check
-        run: npm run prettier-format
+        working-directory: gui
+        run: npm run format
