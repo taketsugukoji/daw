@@ -16,6 +16,16 @@ export const usePlayer = () => {
   const crash = new Tone.Player().toDestination()
 
   const start = async (track: Track) => {
+    if(isPlaying.value){
+      //TODO:もっとスマートに
+      Tone.Transport.stop()
+      Tone.Transport.cancel()
+    }
+    // stop処理終了に間に合わない場合があるため、ここでもcurrentStepを0に(TODO:修正する)
+    currentStep.value = 0
+    // 2回目以降リセットされないので 既存のスケジュールを全部クリア
+    Tone.Transport.stop()
+    Tone.Transport.cancel()
     isPlaying.value = true
 
     await Tone.start()
@@ -48,8 +58,7 @@ export const usePlayer = () => {
       },
     ]
 
-    // 2回目以降リセットされないので 既存のスケジュールを全部クリア
-    Tone.Transport.cancel()
+
 
     Tone.Transport.loop = true
     Tone.Transport.loopEnd = '2m'
@@ -85,6 +94,7 @@ export const usePlayer = () => {
   const stop = () => {
     isPlaying.value = false
     Tone.Transport.stop()
+    Tone.Transport.cancel()
     currentStep.value = 0
   }
 
