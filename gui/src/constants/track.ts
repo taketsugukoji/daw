@@ -1,5 +1,3 @@
-import * as Tone from 'tone'
-
 export interface Track {
   id?: number
   name: string
