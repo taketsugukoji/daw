@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Construction from '@/views/Construction.vue'
-import List from '@/views/List.vue'
+import ConstructionView from '@/views/ConstructionView.vue'
+import ListView from '@/views/ListView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,17 +8,17 @@ const router = createRouter({
     {
       path: '/',
       name: 'create',
-      component: Construction,
+      component: ConstructionView,
     },
     {
       path: '/:id',
       name: 'update',
-      component: Construction,
+      component: ConstructionView,
     },
     {
       path: '/list',
       name: 'list',
-      component: List,
+      component: ListView,
     },
   ],
 })
