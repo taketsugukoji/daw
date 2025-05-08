@@ -15,29 +15,12 @@ export const usePlayer = () => {
   const shaker = new Tone.Player().toDestination()
   const crash = new Tone.Player().toDestination()
 
-  const start = async (track: Track) => {
-    if(isPlaying.value){
-      //TODO:もっとスマートに
-      Tone.Transport.stop()
-      Tone.Transport.cancel()
-    }
-    // stop処理終了に間に合わない場合があるため、ここでもcurrentStepを0に(TODO:修正する)
-    currentStep.value = 0
-    // 2回目以降リセットされないので 既存のスケジュールを全部クリア
-    Tone.Transport.stop()
-    Tone.Transport.cancel()
-    isPlaying.value = true
-
+  const handleDrumLoad = async () => {
     await Tone.start()
-
     await kick.load(soundsPath[4])
-
     await snare.load(soundsPath[3])
-
     await hat.load(soundsPath[2])
-
     await shaker.load(soundsPath[1])
-
     await crash.load(soundsPath[0])
 
     const exeList = [
@@ -58,12 +41,33 @@ export const usePlayer = () => {
       },
     ]
 
+    return exeList
+  }
 
+  const handleSetPattern=()=>{
+
+  }
+
+  let repeatId: number | null = null
+
+  const start = async (track: Track) => {
+    // stop処理終了に間に合わない場合があるため、ここでもcurrentStepを0に(TODO:修正する)
+    currentStep.value = 0
+    Tone.Transport.stop()
+    // 2回目以降リセットされないので 既存のスケジュールを全部クリア
+    Tone.Transport.cancel()
+    if(repeatId){
+      Tone.Transport.clear(repeatId)
+    }
+
+    isPlaying.value = true
+
+    const exeList = await handleDrumLoad();
 
     Tone.Transport.loop = true
     Tone.Transport.loopEnd = '2m'
 
-    Tone.Transport.scheduleRepeat((time) => {
+    repeatId = Tone.Transport.scheduleRepeat((time) => {
       track.pattern.drums.forEach((row, rowIndex) => {
         if (row[currentStep.value] === 1) {
           exeList[rowIndex](time)
@@ -71,7 +75,6 @@ export const usePlayer = () => {
       })
 
       // piano
-
       track.pattern.synth.forEach((row, rowIndex) => {
         if (row[currentStep.value] === 1) {
           piano.triggerAttackRelease(pianoNotes.slice().reverse()[rowIndex], '16n', time)
@@ -79,7 +82,6 @@ export const usePlayer = () => {
       })
 
       // bass
-
       track.pattern.bass.forEach((row, rowIndex) => {
         if (row[currentStep.value] === 1) {
           bass.triggerAttackRelease(bassNotes.slice().reverse()[rowIndex], '16n', time)
@@ -92,10 +94,13 @@ export const usePlayer = () => {
   }
 
   const stop = () => {
-    isPlaying.value = false
     Tone.Transport.stop()
     Tone.Transport.cancel()
+    if(repeatId){
+      Tone.Transport.clear(repeatId)
+    }
     currentStep.value = 0
+    isPlaying.value = false
   }
 
   const download = async (data: Track) => {
@@ -108,34 +113,7 @@ export const usePlayer = () => {
     // Tone.context が開始されていなければ最初に開始
     await Tone.start()
 
-    const kick = new Tone.Player().toDestination()
-    await kick.load(soundsPath[4])
-
-    const snare = new Tone.Player().toDestination()
-    await snare.load(soundsPath[3])
-
-    const hat = new Tone.Player().toDestination()
-    await hat.load(soundsPath[2])
-
-    const shaker = new Tone.Player().toDestination()
-    await shaker.load(soundsPath[1])
-
-    const crash = new Tone.Player().toDestination()
-    await crash.load(soundsPath[0])
-
-    const piano = new Tone.PolySynth().toDestination()
-
-    const bass = new Tone.PolySynth(Tone.Synth, {
-      oscillator: { type: 'sawtooth' },
-    }).toDestination()
-
-    const exeList = [
-      (time) => crash.start(time),
-      (time) => shaker.start(time),
-      (time) => hat.start(time),
-      (time) => snare.start(time),
-      (time) => kick.start(time),
-    ]
+    const exeList = await handleDrumLoad();
 
     // 2回目以降リセットされないので既存のスケジュールを全部クリア
     Tone.Transport.cancel()

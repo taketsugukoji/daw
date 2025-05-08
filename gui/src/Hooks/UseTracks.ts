@@ -1,4 +1,4 @@
-import type { Track } from '@/views/ConstructionView.vue'
+import type {Track} from "@/constants/track.ts";
 
 export const createTrack = async (track: Omit<Track, 'id'>) => {
   try {
