@@ -44,22 +44,9 @@ export const usePlayer = () => {
     return exeList
   }
 
-  const handleSetPattern=()=>{
-
-  }
-
   let repeatId: number | null = null
 
   const start = async (track: Track) => {
-    // stop処理終了に間に合わない場合があるため、ここでもcurrentStepを0に(TODO:修正する)
-    currentStep.value = 0
-    Tone.Transport.stop()
-    // 2回目以降リセットされないので 既存のスケジュールを全部クリア
-    Tone.Transport.cancel()
-    if(repeatId){
-      Tone.Transport.clear(repeatId)
-    }
-
     isPlaying.value = true
 
     const exeList = await handleDrumLoad();
@@ -122,10 +109,10 @@ export const usePlayer = () => {
     const actx = Tone.context
     const dest = actx.createMediaStreamDestination()
     const recorder = new MediaRecorder(dest.stream)
-    const chunks = []
+    const chunks = [];
 
     // 出力先を録音用に設定
-    ;[kick, snare, hat, shaker, crash, piano, bass].forEach((player) => player.connect(dest))
+    [kick, snare, hat, shaker, crash, piano, bass].forEach((player) => player.connect(dest))
 
     // 録音開始
     recorder.start()

@@ -33,9 +33,9 @@ const saveTrack = async () => {
   const { id, ...otherProps } = track.value
 
   if (id) {
-    await updateTrack(otherProps)
+    await updateTrack(track.value)
   } else {
-    await createTrack(track.value)
+    await createTrack(otherProps)
   }
 
   if (isPlaying.value) {
