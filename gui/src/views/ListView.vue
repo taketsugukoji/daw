@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, type Ref } from 'vue'
+import {ref, onMounted, type Ref, onUnmounted} from 'vue'
 import router from '@/router'
 import {deleteTrack, getAllTracks} from '@/Hooks/UseTracks.ts'
 import { type Track } from '@/constants/track.ts'
@@ -16,9 +16,6 @@ const fetchTracks = async () => {
 }
 
 const handleUpdate = (id: number) => {
-  if (isPlaying.value) {
-    stop()
-  }
   router.push({ name: 'update', params: { id } })
 }
 
@@ -37,6 +34,12 @@ const handleStart = (track: Track, index: number) => {
 
 onMounted(() => {
   fetchTracks()
+})
+
+onUnmounted(()=>{
+  if(isPlaying.value){
+    stop()
+  }
 })
 </script>
 
