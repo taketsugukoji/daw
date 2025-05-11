@@ -1,35 +1,40 @@
 <script setup lang="ts">
-import { ref, watch} from "vue";
-import {onBeforeRouteLeave} from "vue-router";
+import { ref, watch } from 'vue'
+import { onBeforeRouteLeave } from 'vue-router'
 
 const props = defineProps<{
-  name:string
+  name: string
 }>()
-const emit = defineEmits<{(e:'save',value:string):void}>()
+const emit = defineEmits<{ (e: 'save', value: string): void }>()
 
 const formValue = ref(props.name)
-const isFormChanged = ref(false);
+const isFormChanged = ref(false)
 const errorMessage = ref('')
 
-const handleChange=()=>{
-  isFormChanged.value = true;
+const handleChange = () => {
+  isFormChanged.value = true
 }
 
-const handleSave=()=>{
+const handleSave = () => {
   if (!formValue.value.trim()) {
     // TODO:vee-validateとか使得るようにしたい
     errorMessage.value = '曲名は1文字以上で入力してください'
     return
   }
-  emit('save',formValue.value)
-  isFormChanged.value = false;
+
+  const answer = window.confirm('変更内容を保存しますか？')
+  if (!answer) {
+    return false
+  }
+  emit('save', formValue.value)
+  isFormChanged.value = false
 }
 
-onBeforeRouteLeave((to,from)=>{
-  if(isFormChanged.value){
-    const answer=window.confirm(    '遷移しますか？')
+onBeforeRouteLeave(() => {
+  if (isFormChanged.value) {
+    const answer = window.confirm('遷移しますか？')
 
-    if(!answer){
+    if (!answer) {
       return false
     }
   }
@@ -37,14 +42,17 @@ onBeforeRouteLeave((to,from)=>{
 
 // データ取得までのタイムラグがあるため
 // TODO: いい感じに修正できるようにする
-watch(()=>props.name,(newVal)=>{
-  formValue.value = newVal;
-})
+watch(
+  () => props.name,
+  (newVal) => {
+    formValue.value = newVal
+  },
+)
 </script>
 
 <template>
   <div class="save-form">
-    <input v-model="formValue" placeholder="名前" @change="handleChange"/>
+    <input v-model="formValue" placeholder="名前" @change="handleChange" />
     <button @click="handleSave">保存</button>
     <div v-if="errorMessage">
       {{ errorMessage }}
@@ -53,7 +61,6 @@ watch(()=>props.name,(newVal)=>{
 </template>
 
 <style scoped>
-
 .save-form {
   margin-bottom: 30px;
   padding: 20px;

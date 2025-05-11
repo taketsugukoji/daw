@@ -20,6 +20,9 @@ const handleUpdate = (id: number) => {
 }
 
 const handleDeleteTrack = async (id: number) => {
+  const answer = confirm('対象の曲を削除しますか？')
+  if (!answer) return
+
   await deleteTrack(id)
   tracks.value = tracks.value.filter((track) => track.id !== id)
 }

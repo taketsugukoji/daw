@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import DrumCell from '@/components/DrumCell.vue'
 import SynthCell from '@/components/SynthCell.vue'
-import {ref, onMounted, onUnmounted, computed} from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import router from '@/router'
 import { createTrack, getTrack, updateTrack } from '@/Hooks/UseTracks.ts'
@@ -15,14 +15,14 @@ import {
 } from '@/constants/track.ts'
 import { handleInstReset, handleChangeWave, handleToggleIsActive } from '@/utils/track.ts'
 import { usePlayer } from '@/Hooks/UsePlayer.ts'
-import NameForm from "@/components/NameForm.vue";
+import NameForm from '@/components/NameForm.vue'
 
 const route = useRoute()
 const id = route.params.id
 
 const track = ref<Track>(defaultTrack)
 
-const trackName=computed(()=>track.value.name);
+const trackName = computed(() => track.value.name)
 
 const handleSetupData = async () => {
   if (!id) return
@@ -32,7 +32,7 @@ const handleSetupData = async () => {
 const { start, stop, isPlaying, currentStep, inst } = usePlayer()
 const { bass, piano } = inst
 
-const saveTrack = async (name:string) => {
+const saveTrack = async (name: string) => {
   track.value.name = name
   const { id, ...otherProps } = track.value
 
@@ -86,7 +86,6 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
-
     <div class="grid-container">
       Bass
       <div>
@@ -134,7 +133,7 @@ onUnmounted(() => {
     </div>
     <div @click="handleInstReset(track, true, true, true)">all reset</div>
   </div>
- <NameForm :name="trackName" @save="saveTrack"/>
+  <NameForm :name="trackName" @save="saveTrack" />
 </template>
 
 <style scoped>

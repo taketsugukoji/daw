@@ -5,7 +5,7 @@ const props = defineProps<{
   path: string
   isActive: boolean
   isCurrentStep: boolean
-  isPlayling: boolean
+  isPlaying: boolean
 }>()
 
 const emit = defineEmits(['toggleIsActive'])
@@ -31,7 +31,7 @@ function buttonClick() {
     class="cell"
     :class="{
       active: props.isActive,
-      lighting: props.isActive && props.isCurrentStep && props.isPlayling,
+      lighting: props.isActive && props.isCurrentStep && props.isPlaying,
     }"
   ></div>
 </template>
