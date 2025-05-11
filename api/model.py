@@ -14,19 +14,19 @@ class Track(Base):
     __tablename__ = "tracks"
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    pattern = Column(String)
+    instruments = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    def __init__(self, name: str, pattern: str):
+    def __init__(self, name: str, instruments: str):
         self.name = name
-        self.pattern = pattern
+        self.instruments = instruments
 
     def to_dict(self):
         return {
             "id": self.id,
             "name": self.name,
-            "pattern": json.loads(self.pattern),  # JSON文字列を辞書に戻す
+            "instruments": json.loads(self.instruments),  # JSON文字列を辞書に戻す
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
         }
@@ -39,9 +39,9 @@ Base.metadata.create_all(engine)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-def create(db: Session, name: str, pattern: str) -> Optional[Track]:
+def create(db: Session, name: str, instruments: str) -> Optional[Track]:
     try:
-        target = Track(name=name, pattern=pattern)
+        target = Track(name=name, instruments=instruments)
         db.add(target)
         db.commit()
         db.refresh(target)
@@ -51,12 +51,12 @@ def create(db: Session, name: str, pattern: str) -> Optional[Track]:
         return None
 
 
-def update(db: Session, id: int, name: str, pattern: str) -> Optional[Track]:
+def update(db: Session, id: int, name: str, instruments: str) -> Optional[Track]:
     try:
         db_track = db.query(Track).filter(Track.id == id).first()
         if db_track:
             db_track.name = name
-            db_track.pattern = pattern
+            db_track.instruments = instruments
             db.commit()
             db.refresh(db_track)
         return db_track
