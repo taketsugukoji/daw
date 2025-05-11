@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import DrumCell from '@/components/DrumCell.vue'
 import SynthCell from '@/components/SynthCell.vue'
-import { ref, onMounted, onUnmounted } from 'vue'
+import {ref, onMounted, onUnmounted, computed} from 'vue'
 import { useRoute } from 'vue-router'
 import router from '@/router'
 import { createTrack, getTrack, updateTrack } from '@/Hooks/UseTracks.ts'
@@ -15,11 +15,14 @@ import {
 } from '@/constants/track.ts'
 import { handleInstReset, handleChangeWave, handleToggleIsActive } from '@/utils/track.ts'
 import { usePlayer } from '@/Hooks/UsePlayer.ts'
+import NameForm from "@/components/NameForm.vue";
 
 const route = useRoute()
 const id = route.params.id
 
 const track = ref<Track>(defaultTrack)
+
+const trackName=computed(()=>track.value.name);
 
 const handleSetupData = async () => {
   if (!id) return
@@ -29,7 +32,8 @@ const handleSetupData = async () => {
 const { start, stop, isPlaying, currentStep, inst } = usePlayer()
 const { bass, piano } = inst
 
-const saveTrack = async () => {
+const saveTrack = async (name:string) => {
+  track.value.name = name
   const { id, ...otherProps } = track.value
 
   if (id) {
@@ -130,11 +134,7 @@ onUnmounted(() => {
     </div>
     <div @click="handleInstReset(track, true, true, true)">all reset</div>
   </div>
-
-  <div class="save-form">
-    <input v-model="track.name" placeholder="名前" />
-    <button @click="saveTrack">保存</button>
-  </div>
+ <NameForm :name="trackName" @save="saveTrack"/>
 </template>
 
 <style scoped>
@@ -155,18 +155,6 @@ onUnmounted(() => {
 .row-container {
   display: flex;
   gap: 4px;
-}
-
-.save-form {
-  margin-bottom: 30px;
-  padding: 20px;
-  background-color: #f5f5f5;
-  border-radius: 8px;
-}
-
-.save-form input {
-  margin-right: 10px;
-  padding: 5px;
 }
 
 button {
