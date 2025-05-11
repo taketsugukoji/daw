@@ -5,10 +5,9 @@ import { ref } from 'vue'
 export const usePlayer = () => {
   const currentStep = ref(0)
   const isPlaying = ref(false)
-  const isRendering = ref(false)
 
   const piano = new Tone.PolySynth().toDestination()
-  const bass = new Tone.PolySynth(Tone.Synth, { oscillator: { type: 'sawtooth' } }).toDestination()
+  const bass = new Tone.PolySynth().toDestination()
   const kick = new Tone.Player().toDestination()
   const snare = new Tone.Player().toDestination()
   const hat = new Tone.Player().toDestination()
@@ -49,27 +48,31 @@ export const usePlayer = () => {
   const start = async (track: Track) => {
     isPlaying.value = true
 
-    const exeList = await handleDrumLoad();
+    const exeList = await handleDrumLoad()
+
+    // 波形タイプセット
+    piano.set({ oscillator: { type: track.instruments.synth.waveType } })
+    bass.set({ oscillator: { type: track.instruments.bass.waveType } })
 
     Tone.Transport.loop = true
     Tone.Transport.loopEnd = '2m'
 
     repeatId = Tone.Transport.scheduleRepeat((time) => {
-      track.pattern.drums.forEach((row, rowIndex) => {
+      track.instruments.drums.pattern.forEach((row, rowIndex) => {
         if (row[currentStep.value] === 1) {
           exeList[rowIndex](time)
         }
       })
 
       // piano
-      track.pattern.synth.forEach((row, rowIndex) => {
+      track.instruments.synth.pattern.forEach((row, rowIndex) => {
         if (row[currentStep.value] === 1) {
           piano.triggerAttackRelease(pianoNotes.slice().reverse()[rowIndex], '16n', time)
         }
       })
 
       // bass
-      track.pattern.bass.forEach((row, rowIndex) => {
+      track.instruments.bass.pattern.forEach((row, rowIndex) => {
         if (row[currentStep.value] === 1) {
           bass.triggerAttackRelease(bassNotes.slice().reverse()[rowIndex], '16n', time)
         }
@@ -83,98 +86,17 @@ export const usePlayer = () => {
   const stop = () => {
     Tone.Transport.stop()
     Tone.Transport.cancel()
-    if(repeatId){
+    if (repeatId) {
       Tone.Transport.clear(repeatId)
     }
     currentStep.value = 0
     isPlaying.value = false
   }
 
-  const download = async (data: Track) => {
-    if (isPlaying.value) {
-      stop() // 再生中なら停止
-    }
-
-    isRendering.value = true // レンダリング中フラグ
-
-    // Tone.context が開始されていなければ最初に開始
-    await Tone.start()
-
-    const exeList = await handleDrumLoad();
-
-    // 2回目以降リセットされないので既存のスケジュールを全部クリア
-    Tone.Transport.cancel()
-
-    // 録音用のセットアップ
-    const actx = Tone.context
-    const dest = actx.createMediaStreamDestination()
-    const recorder = new MediaRecorder(dest.stream)
-    const chunks = [];
-
-    // 出力先を録音用に設定
-    [kick, snare, hat, shaker, crash, piano, bass].forEach((player) => player.connect(dest))
-
-    // 録音開始
-    recorder.start()
-
-    // 録音データが用意されたら、そのデータをchunks配列に保存
-    recorder.ondataavailable = (evt) => chunks.push(evt.data)
-
-    // 録音停止後にダウンロード処理
-    recorder.onstop = () => {
-      const blob = new Blob(chunks, { type: 'audio/mp3; codecs=opus' })
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = 'generated_audio.mp3' // 自動ダウンロードするファイル名
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      isRendering.value = false
-      Tone.Transport.stop()
-      currentStep.value = 0
-    }
-
-    // 32ステップのパターンをスケジュール
-    Tone.Transport.scheduleRepeat((time) => {
-      data.pattern.drums.forEach((row, rowIndex) => {
-        if (row[currentStep.value] === 1) {
-          exeList[rowIndex](time)
-        }
-      })
-
-      // piano
-      data.pattern.synth.forEach((row, rowIndex) => {
-        if (row[currentStep.value] === 1) {
-          piano.triggerAttackRelease(pianoNotes.slice().reverse()[rowIndex], '16n', time)
-        }
-      })
-
-      // bass
-      data.pattern.bass.forEach((row, rowIndex) => {
-        if (row[currentStep.value] === 1) {
-          bass.triggerAttackRelease(bassNotes.slice().reverse()[rowIndex], '16n', time)
-        }
-      })
-
-      // 32ステップ終了時
-      if (currentStep.value === 31) {
-        recorder.stop() // 録音停止
-      }
-
-      currentStep.value = (currentStep.value + 1) % 32
-    }, '16n')
-
-    // 録音と再生開始
-    Tone.Transport.start()
-  }
-
   return {
     start,
     stop,
-    download,
     isPlaying,
-    isRendering,
     currentStep,
     inst: {
       kick,

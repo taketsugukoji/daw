@@ -1,6 +1,6 @@
-import type {Track} from "@/constants/track.ts";
+import type { Track, TrackCreateParams } from '@/constants/track.ts'
 
-export const createTrack = async (track: Omit<Track, 'id'>) => {
+export const createTrack = async (track: TrackCreateParams) => {
   try {
     const response = await fetch('http://localhost:8000/track', {
       method: 'POST',

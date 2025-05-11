@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import * as Tone from 'tone'
+import type { NonCustomOscillatorType } from 'tone/Tone/source/oscillator/OscillatorInterface.ts'
 
 const props = defineProps<{
   note: string
@@ -7,6 +8,7 @@ const props = defineProps<{
   isCurrentStep: boolean
   isPlaying: boolean
   tone: Tone.PolySynth<Tone.Synth<Tone.SynthOptions>>
+  waveType: NonCustomOscillatorType
 }>()
 
 const emit = defineEmits(['toggleIsActive'])
@@ -14,6 +16,7 @@ const emit = defineEmits(['toggleIsActive'])
 const playSound = async () => {
   await Tone.start() // ユーザー操作内で初期化
 
+  props.tone.set({ oscillator: { type: props.waveType } })
   props.tone.triggerAttackRelease(props.note, '16n')
 }
 

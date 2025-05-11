@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import {ref, onMounted, type Ref, onUnmounted} from 'vue'
+import { ref, onMounted, type Ref, onUnmounted } from 'vue'
 import router from '@/router'
-import {deleteTrack, getAllTracks} from '@/Hooks/UseTracks.ts'
+import { deleteTrack, getAllTracks } from '@/Hooks/UseTracks.ts'
 import { type Track } from '@/constants/track.ts'
 import { usePlayer } from '@/Hooks/UsePlayer.ts'
 
 const tracks = ref<Track[]>([])
 const playingListIndex: Ref<null | number> = ref(null)
 
-const { start, stop, isPlaying, isRendering, download } = usePlayer()
+const { start, stop, isPlaying } = usePlayer()
 
 const fetchTracks = async () => {
   const res = await getAllTracks()
@@ -36,8 +36,8 @@ onMounted(() => {
   fetchTracks()
 })
 
-onUnmounted(()=>{
-  if(isPlaying.value){
+onUnmounted(() => {
+  if (isPlaying.value) {
     stop()
   }
 })
@@ -47,14 +47,12 @@ onUnmounted(()=>{
   <div class="track-manager">
     <div class="track-list">
       <h2>保存した曲一覧</h2>
-      <div v-if="isRendering">レンダリング中</div>
       <div v-for="(track, index) in tracks" :key="track.id" class="track-item">
         <span>名前: {{ track.name }}</span>
         <button @click="stop" v-if="isPlaying && playingListIndex === index">⏹️</button>
         <button @click="handleStart(track, index)" v-else>▶️</button>
         <div @click="handleUpdate(track.id as number)">編集</div>
         <div @click="handleDeleteTrack(track.id as number)">削除</div>
-        <div @click="download(track)">ダウンロード</div>
       </div>
     </div>
   </div>

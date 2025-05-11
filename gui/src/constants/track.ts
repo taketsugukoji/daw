@@ -1,14 +1,41 @@
+import type { NonCustomOscillatorType } from 'tone/Tone/source/oscillator/OscillatorInterface.ts'
+
 export interface Track {
   id?: number
   name: string
-  pattern: {
-    synth: number[][]
-    bass: number[][]
-    drums: number[][]
+  instruments: {
+    synth: {
+      pattern: number[][]
+      waveType: NonCustomOscillatorType
+    }
+    bass: {
+      pattern: number[][]
+      waveType: NonCustomOscillatorType
+    }
+    drums: {
+      pattern: number[][]
+    }
   }
 }
 
 export type TrackCreateParams = Omit<Track, 'id'>
+
+export const defaultTrack: TrackCreateParams = {
+  name: '',
+  instruments: {
+    synth: {
+      pattern: Array.from({ length: 24 }, () => Array(32).fill(0)),
+      waveType: 'sine',
+    },
+    bass: {
+      pattern: Array.from({ length: 24 }, () => Array(32).fill(0)),
+      waveType: 'sine',
+    },
+    drums: {
+      pattern: Array.from({ length: 5 }, () => Array(32).fill(0)),
+    },
+  },
+}
 
 export const pianoNotes = [
   'C3',
@@ -71,15 +98,6 @@ export const soundsPath = [
   '/sounds/snare.mp3',
   '/sounds/kick.mp3',
 ] as const
-
-export const defaultTrack = {
-  name: '',
-  pattern: {
-    synth: Array.from({ length: 24 }, () => Array(32).fill(0)),
-    bass: Array.from({ length: 24 }, () => Array(32).fill(0)),
-    drums: Array.from({ length: 5 }, () => Array(32).fill(0)),
-  },
-}
 
 export const selectWaveItems = [
   { name: '正弦波', value: 'sine' },

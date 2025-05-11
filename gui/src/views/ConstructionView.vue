@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import DrumCell from '@/components/DrumCell.vue'
 import SynthCell from '@/components/SynthCell.vue'
-import {ref, onMounted, onUnmounted} from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import router from '@/router'
 import { createTrack, getTrack, updateTrack } from '@/Hooks/UseTracks.ts'
@@ -13,7 +13,7 @@ import {
   soundsPath,
   type Track,
 } from '@/constants/track.ts'
-import { handleAllReset, handleChangeWave, handleToggleIsActive } from '@/utils/track.ts'
+import { handleInstReset, handleChangeWave, handleToggleIsActive } from '@/utils/track.ts'
 import { usePlayer } from '@/Hooks/UsePlayer.ts'
 
 const route = useRoute()
@@ -49,7 +49,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  handleAllReset(track.value.pattern)
+  handleInstReset(track.value, true, true, true)
 })
 </script>
 
@@ -59,13 +59,16 @@ onUnmounted(() => {
     <div class="grid-container">
       PIANO
       <div>
-        <select @change="handleChangeWave($event, piano)">
+        <select
+          v-model="track.instruments.synth.waveType"
+          @change="handleChangeWave($event, piano, 'synth', track)"
+        >
           <option v-for="item in selectWaveItems" :key="item.value" :value="item.value">
             {{ item.name }}
           </option>
         </select>
       </div>
-      <div v-for="(item, i) of track.pattern.synth" :key="i" class="row-container">
+      <div v-for="(item, i) of track.instruments.synth.pattern" :key="i" class="row-container">
         <div v-for="(cell, x) of item" :key="x">
           <SynthCell
             :note="pianoNotes.slice().reverse()[i]"
@@ -73,7 +76,8 @@ onUnmounted(() => {
             :is-current-step="x === currentStep"
             :is-playing="isPlaying"
             :tone="piano"
-            @toggle-is-active="handleToggleIsActive(i, x, track.pattern.synth)"
+            :wave-type="track.instruments.synth.waveType"
+            @toggle-is-active="handleToggleIsActive(i, x, track.instruments.synth.pattern)"
           />
         </div>
       </div>
@@ -82,13 +86,16 @@ onUnmounted(() => {
     <div class="grid-container">
       Bass
       <div>
-        <select @change="handleChangeWave($event, bass)">
+        <select
+          v-model="track.instruments.bass.waveType"
+          @change="handleChangeWave($event, bass, 'bass', track)"
+        >
           <option v-for="item in selectWaveItems" :key="item.value" :value="item.value">
             {{ item.name }}
           </option>
         </select>
       </div>
-      <div v-for="(item, i) of track.pattern.bass" :key="i" class="row-container">
+      <div v-for="(item, i) of track.instruments.bass.pattern" :key="i" class="row-container">
         <div v-for="(cell, x) of item" :key="x">
           <SynthCell
             :note="bassNotes.slice().reverse()[i]"
@@ -96,7 +103,8 @@ onUnmounted(() => {
             :is-current-step="x === currentStep"
             :is-playing="isPlaying"
             :tone="bass"
-            @toggle-is-active="handleToggleIsActive(i, x, track.pattern.bass)"
+            :wave-type="track.instruments.bass.waveType"
+            @toggle-is-active="handleToggleIsActive(i, x, track.instruments.bass.pattern)"
           />
         </div>
       </div>
@@ -104,14 +112,14 @@ onUnmounted(() => {
 
     <div class="grid-container">
       DRUM
-      <div v-for="(item, i) of track.pattern.drums" :key="i" class="row-container">
+      <div v-for="(item, i) of track.instruments.drums.pattern" :key="i" class="row-container">
         <div v-for="(cell, x) of item" :key="x">
           <DrumCell
             :path="soundsPath[i]"
             :is-active="cell === 1"
             :is-current-step="x === currentStep"
             :is-playling="isPlaying"
-            @toggle-is-active="handleToggleIsActive(i, x, track.pattern.drums)"
+            @toggle-is-active="handleToggleIsActive(i, x, track.instruments.drums.pattern)"
           />
         </div>
       </div>
@@ -120,7 +128,7 @@ onUnmounted(() => {
       <div @click="start(track)">start</div>
       <div @click="stop">stop</div>
     </div>
-    <div @click="handleAllReset(track.pattern)">all reset</div>
+    <div @click="handleInstReset(track, true, true, true)">all reset</div>
   </div>
 
   <div class="save-form">
