@@ -13,9 +13,11 @@ import {
   soundsPath,
   type Track,
 } from '@/constants/track.ts'
-import { handleInstReset, handleChangeWave, handleToggleIsActive } from '@/utils/track.ts'
+import { handleInstReset, handleChangeWave, toggleIsActive } from '@/utils/track.ts'
 import { usePlayer } from '@/Hooks/UsePlayer.ts'
 import NameForm from '@/components/NameForm.vue'
+import KeyCell from '@/components/KeyCell.vue'
+import SynthGrid from '@/components/SynthGrid.vue'
 
 const route = useRoute()
 const id = route.params.id
@@ -27,6 +29,10 @@ const trackName = computed(() => track.value.name)
 const handleSetupData = async () => {
   if (!id) return
   track.value = await getTrack(Number(id))
+}
+
+const handleSynthToggleIsActive = (i: number, x: number) => {
+  toggleIsActive(i, x, track.value.instruments.synth.pattern)
 }
 
 const { start, stop, isPlaying, currentStep, inst } = usePlayer()
@@ -72,18 +78,15 @@ onUnmounted(() => {
           </option>
         </select>
       </div>
-      <div v-for="(item, i) of track.instruments.synth.pattern" :key="i" class="row-container">
-        <div v-for="(cell, x) of item" :key="x">
-          <SynthCell
-            :note="pianoNotes.slice().reverse()[i]"
-            :is-active="cell === 1"
-            :is-current-step="x === currentStep"
-            :is-playing="isPlaying"
-            :tone="piano"
-            :wave-type="track.instruments.synth.waveType"
-            @toggle-is-active="handleToggleIsActive(i, x, track.instruments.synth.pattern)"
-          />
-        </div>
+      <div>
+        <SynthGrid
+          :pattern="track.instruments.synth.pattern"
+          :current-step="currentStep"
+          :is-playing="isPlaying"
+          :tone="piano"
+          :wave-type="track.instruments.synth.waveType"
+          :handle-toggle-is-active="handleSynthToggleIsActive"
+        />
       </div>
     </div>
     <div class="grid-container">
@@ -107,7 +110,7 @@ onUnmounted(() => {
             :is-playing="isPlaying"
             :tone="bass"
             :wave-type="track.instruments.bass.waveType"
-            @toggle-is-active="handleToggleIsActive(i, x, track.instruments.bass.pattern)"
+            @toggle-is-active="toggleIsActive(i, x, track.instruments.bass.pattern)"
           />
         </div>
       </div>
@@ -121,8 +124,8 @@ onUnmounted(() => {
             :path="soundsPath[i]"
             :is-active="cell === 1"
             :is-current-step="x === currentStep"
-            :is-playling="isPlaying"
-            @toggle-is-active="handleToggleIsActive(i, x, track.instruments.drums.pattern)"
+            :is-playing="isPlaying"
+            @toggle-is-active="toggleIsActive(i, x, track.instruments.drums.pattern)"
           />
         </div>
       </div>
@@ -153,9 +156,7 @@ onUnmounted(() => {
 }
 .row-container {
   display: flex;
-  gap: 4px;
 }
-
 button {
   margin: 0 5px;
   padding: 5px 10px;

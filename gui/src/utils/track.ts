@@ -2,11 +2,7 @@ import * as Tone from 'tone'
 import type { NonCustomOscillatorType } from 'tone/Tone/source/oscillator/OscillatorInterface.ts'
 import { selectWaveItems, type Track } from '@/constants/track.ts'
 
-export const handleToggleIsActive = (
-  rowNumber: number,
-  colNumber: number,
-  targetPattern: number[][],
-) => {
+export const toggleIsActive = (rowNumber: number, colNumber: number, targetPattern: number[][]) => {
   targetPattern[rowNumber][colNumber] = targetPattern[rowNumber][colNumber] === 1 ? 0 : 1
 }
 

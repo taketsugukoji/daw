@@ -41,7 +41,7 @@ function buttonClick() {
 .cell {
   width: 30px;
   height: 15px;
-  border: 2px solid #ddd;
+  border: 1px solid #ddd;
   background-color: #fff;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
