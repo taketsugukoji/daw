@@ -28,17 +28,11 @@ export const handleInstReset = (
 }
 
 export const handleChangeWave = (
-  e: Event,
+  type: NonCustomOscillatorType,
   targetTone: Tone.PolySynth<Tone.Synth<Tone.SynthOptions>>,
   targetInst: 'synth' | 'bass', // TODO: enumにする
   track: Track,
 ) => {
-  const target = e.target as HTMLSelectElement
-  const matchedType = selectWaveItems.find((item) => item.value === target.value)
-  if (!matchedType) {
-    throw new Error(`不適切な波形が指定されています: ${target.value}`)
-  }
-  const type = target.value as NonCustomOscillatorType
   targetTone.set({ oscillator: { type } })
 
   switch (targetInst) {

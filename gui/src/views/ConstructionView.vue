@@ -1,23 +1,15 @@
 <script setup lang="ts">
 import DrumCell from '@/components/DrumCell.vue'
-import SynthCell from '@/components/SynthCell.vue'
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import router from '@/router'
 import { createTrack, getTrack, updateTrack } from '@/Hooks/UseTracks.ts'
-import {
-  bassNotes,
-  defaultTrack,
-  pianoNotes,
-  selectWaveItems,
-  soundsPath,
-  type Track,
-} from '@/constants/track.ts'
+import { defaultTrack, soundsPath, type Track } from '@/constants/track.ts'
 import { handleInstReset, handleChangeWave, toggleIsActive } from '@/utils/track.ts'
 import { usePlayer } from '@/Hooks/UsePlayer.ts'
 import NameForm from '@/components/NameForm.vue'
-import KeyCell from '@/components/KeyCell.vue'
 import SynthGrid from '@/components/SynthGrid.vue'
+import WaveSelect from '@/components/WaveSelect.vue'
 
 const route = useRoute()
 const id = route.params.id
@@ -29,10 +21,6 @@ const trackName = computed(() => track.value.name)
 const handleSetupData = async () => {
   if (!id) return
   track.value = await getTrack(Number(id))
-}
-
-const handleSynthToggleIsActive = (i: number, x: number) => {
-  toggleIsActive(i, x, track.value.instruments.synth.pattern)
 }
 
 const { start, stop, isPlaying, currentStep, inst } = usePlayer()
@@ -69,14 +57,10 @@ onUnmounted(() => {
     <div class="grid-container">
       PIANO
       <div>
-        <select
-          v-model="track.instruments.synth.waveType"
-          @change="handleChangeWave($event, piano, 'synth', track)"
-        >
-          <option v-for="item in selectWaveItems" :key="item.value" :value="item.value">
-            {{ item.name }}
-          </option>
-        </select>
+        <WaveSelect
+          v-model:wave-type="track.instruments.synth.waveType"
+          @update:wave-type="(value) => handleChangeWave(value, piano, 'synth', track)"
+        />
       </div>
       <div>
         <SynthGrid
@@ -85,34 +69,27 @@ onUnmounted(() => {
           :is-playing="isPlaying"
           :tone="piano"
           :wave-type="track.instruments.synth.waveType"
-          :handle-toggle-is-active="handleSynthToggleIsActive"
+          @toggle-is-active="(i, x) => toggleIsActive(i, x, track.instruments.synth.pattern)"
         />
       </div>
     </div>
     <div class="grid-container">
       Bass
       <div>
-        <select
-          v-model="track.instruments.bass.waveType"
-          @change="handleChangeWave($event, bass, 'bass', track)"
-        >
-          <option v-for="item in selectWaveItems" :key="item.value" :value="item.value">
-            {{ item.name }}
-          </option>
-        </select>
+        <WaveSelect
+          v-model:wave-type="track.instruments.bass.waveType"
+          @update:wave-type="(value) => handleChangeWave(value, bass, 'bass', track)"
+        />
       </div>
-      <div v-for="(item, i) of track.instruments.bass.pattern" :key="i" class="row-container">
-        <div v-for="(cell, x) of item" :key="x">
-          <SynthCell
-            :note="bassNotes.slice().reverse()[i]"
-            :is-active="cell === 1"
-            :is-current-step="x === currentStep"
-            :is-playing="isPlaying"
-            :tone="bass"
-            :wave-type="track.instruments.bass.waveType"
-            @toggle-is-active="toggleIsActive(i, x, track.instruments.bass.pattern)"
-          />
-        </div>
+      <div>
+        <SynthGrid
+          :pattern="track.instruments.bass.pattern"
+          :current-step="currentStep"
+          :is-playing="isPlaying"
+          :tone="bass"
+          :wave-type="track.instruments.bass.waveType"
+          @toggle-is-active="(i, x) => toggleIsActive(i, x, track.instruments.bass.pattern)"
+        />
       </div>
     </div>
 

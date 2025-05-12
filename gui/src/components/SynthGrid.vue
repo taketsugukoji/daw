@@ -11,7 +11,10 @@ const props = defineProps<{
   isPlaying: boolean
   tone: Tone.PolySynth<Tone.Synth<Tone.SynthOptions>>
   waveType: NonCustomOscillatorType
-  handleToggleIsActive: (i: number, x: number) => void
+}>()
+
+const emit = defineEmits<{
+  (e: 'toggleIsActive', i: number, x: number): void
 }>()
 </script>
 
@@ -27,7 +30,7 @@ const props = defineProps<{
           :is-playing="isPlaying"
           :tone="props.tone"
           :wave-type="props.waveType"
-          @toggle-is-active="props.handleToggleIsActive(i, x)"
+          @toggle-is-active="emit('toggleIsActive', i, x)"
         />
       </div>
     </div>
