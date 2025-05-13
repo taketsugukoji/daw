@@ -99,6 +99,8 @@ export const soundsPath = [
   '/sounds/kick.mp3',
 ] as const
 
+export const drumTypeLabel = ['CRASH', 'SHAKER', 'HAT', 'SNARE', 'KICK'] as const
+
 export const selectWaveItems = [
   { name: '正弦波', value: 'sine' },
   { name: '四角波', value: 'square' },

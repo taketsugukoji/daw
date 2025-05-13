@@ -42,6 +42,7 @@ function buttonClick() {
   width: 30px;
   height: 15px;
   border: 1px solid #ddd;
+  border-radius: 3px;
   background-color: #fff;
   transition: all 0.2s ease-in-out;
   cursor: pointer;

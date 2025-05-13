@@ -5,7 +5,7 @@ import SynthCell from '@/components/SynthCell.vue'
 import * as Tone from 'tone'
 import type { NonCustomOscillatorType } from 'tone/Tone/source/oscillator/OscillatorInterface.ts'
 
-const props = defineProps<{
+defineProps<{
   pattern: number[][]
   currentStep: number
   isPlaying: boolean
@@ -19,17 +19,19 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div v-for="(item, i) of props.pattern" :key="i" class="row-container">
+  <div v-for="(item, i) of pattern" :key="i" class="row-container">
     <div class="tone-container">
-      <KeyCell :is-black="pianoNotes.slice().reverse()[i].includes('#')" />
+      <div class="key-container">
+        <KeyCell :is-black="pianoNotes.slice().reverse()[i].includes('#')" />
+      </div>
       <div v-for="(cell, x) of item" :key="x">
         <SynthCell
           :note="pianoNotes.slice().reverse()[i]"
           :is-active="cell === 1"
           :is-current-step="x === currentStep"
           :is-playing="isPlaying"
-          :tone="props.tone"
-          :wave-type="props.waveType"
+          :tone="tone"
+          :wave-type="waveType"
           @toggle-is-active="emit('toggleIsActive', i, x)"
         />
       </div>
@@ -43,5 +45,8 @@ const emit = defineEmits<{
 }
 .tone-container {
   display: flex;
+}
+.key-container {
+  padding-right: 8px;
 }
 </style>

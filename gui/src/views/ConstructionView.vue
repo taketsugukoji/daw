@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import DrumCell from '@/components/DrumCell.vue'
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import router from '@/router'
@@ -10,6 +9,8 @@ import { usePlayer } from '@/Hooks/UsePlayer.ts'
 import NameForm from '@/components/NameForm.vue'
 import SynthGrid from '@/components/SynthGrid.vue'
 import WaveSelect from '@/components/WaveSelect.vue'
+import DrumGrid from '@/components/DrumGrid.vue'
+import { Icon } from '@iconify/vue'
 
 const route = useRoute()
 const id = route.params.id
@@ -54,6 +55,11 @@ onUnmounted(() => {
 <template>
   <div class="container">
     <h2>プロジェクト</h2>
+    <div class="menu-container">
+      <div @click="start(track)"><Icon icon="mdi:play-circle" width="36" height="36" /></div>
+      <div @click="stop"><Icon icon="mdi:stop-circle" width="36" height="36" /></div>
+    </div>
+    <NameForm :name="trackName" @save="saveTrack" />
     <div class="grid-container">
       PIANO
       <div>
@@ -95,25 +101,17 @@ onUnmounted(() => {
 
     <div class="grid-container">
       DRUM
-      <div v-for="(item, i) of track.instruments.drums.pattern" :key="i" class="row-container">
-        <div v-for="(cell, x) of item" :key="x">
-          <DrumCell
-            :path="soundsPath[i]"
-            :is-active="cell === 1"
-            :is-current-step="x === currentStep"
-            :is-playing="isPlaying"
-            @toggle-is-active="toggleIsActive(i, x, track.instruments.drums.pattern)"
-          />
-        </div>
+      <div>
+        <DrumGrid
+          :pattern="track.instruments.drums.pattern"
+          :currentStep="currentStep"
+          :is-playing="isPlaying"
+        />
       </div>
     </div>
-    <div class="menu-container">
-      <div @click="start(track)">start</div>
-      <div @click="stop">stop</div>
-    </div>
+
     <div @click="handleInstReset(track, true, true, true)">all reset</div>
   </div>
-  <NameForm :name="trackName" @save="saveTrack" />
 </template>
 
 <style scoped>
@@ -131,9 +129,7 @@ onUnmounted(() => {
   flex-direction: column;
   gap: 4px;
 }
-.row-container {
-  display: flex;
-}
+
 button {
   margin: 0 5px;
   padding: 5px 10px;

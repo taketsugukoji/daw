@@ -4,6 +4,7 @@ import router from '@/router'
 import { deleteTrack, getAllTracks } from '@/Hooks/UseTracks.ts'
 import { type Track } from '@/constants/track.ts'
 import { usePlayer } from '@/Hooks/UsePlayer.ts'
+import { Icon } from '@iconify/vue'
 
 const tracks = ref<Track[]>([])
 const playingListIndex: Ref<null | number> = ref(null)
@@ -52,8 +53,12 @@ onUnmounted(() => {
       <h2>保存した曲一覧</h2>
       <div v-for="(track, index) in tracks" :key="track.id" class="track-item">
         <span>名前: {{ track.name }}</span>
-        <button @click="stop" v-if="isPlaying && playingListIndex === index">⏹️</button>
-        <button @click="handleStart(track, index)" v-else>▶️</button>
+        <button @click="stop" v-if="isPlaying && playingListIndex === index">
+          <Icon icon="mdi:stop-circle" width="24" height="24" />
+        </button>
+        <button @click="handleStart(track, index)" v-else>
+          <Icon icon="mdi:play-circle" width="24" height="24" />
+        </button>
         <div @click="handleUpdate(track.id as number)">編集</div>
         <div @click="handleDeleteTrack(track.id as number)">削除</div>
       </div>
