@@ -54,10 +54,10 @@ onUnmounted(() => {
       <div v-for="(track, index) in tracks" :key="track.id" class="track-item">
         <span>名前: {{ track.name }}</span>
         <button @click="stop" v-if="isPlaying && playingListIndex === index">
-          <Icon icon="mdi:stop-circle" width="24" height="24" />
+          <Icon icon="mdi:stop-circle" width="24" height="24" color="darkorange" />
         </button>
         <button @click="handleStart(track, index)" v-else>
-          <Icon icon="mdi:play-circle" width="24" height="24" />
+          <Icon icon="mdi:play-circle" width="24" height="24" color="darkorange" />
         </button>
         <div @click="handleUpdate(track.id as number)">編集</div>
         <div @click="handleDeleteTrack(track.id as number)">削除</div>

@@ -3,7 +3,7 @@ import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import router from '@/router'
 import { createTrack, getTrack, updateTrack } from '@/Hooks/UseTracks.ts'
-import { defaultTrack, soundsPath, type Track } from '@/constants/track.ts'
+import { defaultTrack, type Track } from '@/constants/track.ts'
 import { handleInstReset, handleChangeWave, toggleIsActive } from '@/utils/track.ts'
 import { usePlayer } from '@/Hooks/UsePlayer.ts'
 import NameForm from '@/components/NameForm.vue'
@@ -28,6 +28,14 @@ const { start, stop, isPlaying, currentStep, inst } = usePlayer()
 const { bass, piano } = inst
 
 const saveTrack = async (name: string) => {
+  if (isPlaying.value) {
+    stop()
+  }
+  const answer = window.confirm('変更内容を保存しますか？')
+  if (!answer) {
+    return false
+  }
+
   track.value.name = name
   const { id, ...otherProps } = track.value
 
@@ -37,9 +45,6 @@ const saveTrack = async (name: string) => {
     await createTrack(otherProps)
   }
 
-  if (isPlaying.value) {
-    stop()
-  }
   router.push({ name: 'list' })
 }
 
@@ -56,10 +61,26 @@ onUnmounted(() => {
   <div class="container">
     <h2>プロジェクト</h2>
     <div class="menu-container">
-      <div @click="start(track)"><Icon icon="mdi:play-circle" width="36" height="36" /></div>
-      <div @click="stop"><Icon icon="mdi:stop-circle" width="36" height="36" /></div>
+      <button @click="start(track)">
+        <Icon
+          icon="mdi:play-circle"
+          width="36"
+          height="36"
+          class="icon"
+          :class="{ active: !isPlaying }"
+        />
+      </button>
+      <button @click="stop">
+        <Icon
+          icon="mdi:stop-circle"
+          width="36"
+          height="36"
+          class="icon"
+          :class="{ active: isPlaying }"
+        />
+      </button>
+      <NameForm :name="trackName" @save="saveTrack" />
     </div>
-    <NameForm :name="trackName" @save="saveTrack" />
     <div class="grid-container">
       PIANO
       <div>
@@ -68,16 +89,14 @@ onUnmounted(() => {
           @update:wave-type="(value) => handleChangeWave(value, piano, 'synth', track)"
         />
       </div>
-      <div>
-        <SynthGrid
-          :pattern="track.instruments.synth.pattern"
-          :current-step="currentStep"
-          :is-playing="isPlaying"
-          :tone="piano"
-          :wave-type="track.instruments.synth.waveType"
-          @toggle-is-active="(i, x) => toggleIsActive(i, x, track.instruments.synth.pattern)"
-        />
-      </div>
+      <SynthGrid
+        :pattern="track.instruments.synth.pattern"
+        :current-step="currentStep"
+        :is-playing="isPlaying"
+        :tone="piano"
+        :wave-type="track.instruments.synth.waveType"
+        @toggle-is-active="(i, x) => toggleIsActive(i, x, track.instruments.synth.pattern)"
+      />
     </div>
     <div class="grid-container">
       Bass
@@ -123,6 +142,7 @@ onUnmounted(() => {
 .menu-container {
   display: flex;
   gap: 4px;
+  align-items: center;
 }
 .grid-container {
   display: flex;
@@ -131,24 +151,19 @@ onUnmounted(() => {
 }
 
 button {
-  margin: 0 5px;
-  padding: 5px 10px;
-  background-color: #4caf50;
-  color: white;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
 }
 
+.icon {
+  color: gray;
+}
+
+.icon.active {
+  color: darkorange;
+}
+
 button:hover {
-  background-color: #45a049;
-}
-
-button[onclick*='delete'] {
-  background-color: #f44336;
-}
-
-button[onclick*='delete']:hover {
-  background-color: #da190b;
+  background-color: white;
 }
 </style>

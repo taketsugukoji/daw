@@ -45,21 +45,17 @@ function buttonClick() {
   background-color: #fff;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .cell.active {
-  background-color: deepskyblue;
-  border-color: darkblue;
-  color: white;
-  font-weight: bold;
-  box-shadow: 0 0 6px darkblue;
+  background-color: darkorange;
+  border-color: orangered;
+  box-shadow: 0 0 6px orange;
 }
 
 .cell.lighting {
+  background-color: gold;
+  border-color: goldenrod;
   box-shadow: 0 0 10px 2px yellow;
-  border-color: gold;
 }
 </style>

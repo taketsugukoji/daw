@@ -22,10 +22,6 @@ const handleSave = () => {
     return
   }
 
-  const answer = window.confirm('変更内容を保存しますか？')
-  if (!answer) {
-    return false
-  }
   emit('save', formValue.value)
   isFormChanged.value = false
 }
@@ -62,7 +58,6 @@ watch(
 
 <style scoped>
 .save-form {
-  margin-bottom: 30px;
   padding: 20px;
   background-color: #f5f5f5;
   border-radius: 8px;

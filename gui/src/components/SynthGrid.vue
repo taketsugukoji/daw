@@ -19,12 +19,12 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div v-for="(item, i) of pattern" :key="i" class="row-container">
-    <div class="tone-container">
+  <div class="column-container">
+    <div v-for="(item, i) of pattern" :key="i" class="row-container">
       <div class="key-container">
         <KeyCell :is-black="pianoNotes.slice().reverse()[i].includes('#')" />
       </div>
-      <div v-for="(cell, x) of item" :key="x">
+      <div v-for="(cell, x) of item" :key="x" :class="{ 'octave-boundary': i === 11 }">
         <SynthCell
           :note="pianoNotes.slice().reverse()[i]"
           :is-active="cell === 1"
@@ -40,13 +40,20 @@ const emit = defineEmits<{
 </template>
 
 <style scoped>
+.column-container {
+  display: flex;
+  flex-direction: column;
+}
 .row-container {
   display: flex;
 }
-.tone-container {
-  display: flex;
+.row-container > :nth-child(4n + 5) {
+  border-right: 1px solid lightgray;
 }
 .key-container {
   padding-right: 8px;
+}
+.octave-boundary {
+  border-bottom: 1px solid lightgray;
 }
 </style>

@@ -14,8 +14,7 @@ const props = defineProps<{
 const emit = defineEmits(['toggleIsActive'])
 
 const playSound = async () => {
-  await Tone.start() // ユーザー操作内で初期化
-
+  await Tone.start()
   props.tone.set({ oscillator: { type: props.waveType } })
   props.tone.triggerAttackRelease(props.note, '16n')
 }
@@ -31,8 +30,8 @@ function buttonClick() {
     @click="buttonClick"
     class="cell"
     :class="{
-      active: props.isActive,
-      lighting: props.isActive && props.isCurrentStep && props.isPlaying,
+      active: isActive,
+      lighting: isActive && isCurrentStep && isPlaying,
     }"
   ></div>
 </template>
@@ -46,21 +45,17 @@ function buttonClick() {
   background-color: #fff;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .cell.active {
-  background-color: hotpink;
-  border-color: deeppink;
-  color: white;
-  font-weight: bold;
-  box-shadow: 0 0 6px hotpink;
+  background-color: darkorange;
+  border-color: orangered;
+  box-shadow: 0 0 6px orange;
 }
 
 .cell.lighting {
+  background-color: gold;
+  border-color: goldenrod;
   box-shadow: 0 0 10px 2px yellow;
-  border-color: gold;
 }
 </style>
