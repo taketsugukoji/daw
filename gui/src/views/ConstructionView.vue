@@ -162,8 +162,4 @@ button {
 .icon.active {
   color: darkorange;
 }
-
-button:hover {
-  background-color: white;
-}
 </style>

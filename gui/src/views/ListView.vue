@@ -48,55 +48,47 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="track-manager">
+  <div>
     <div class="track-list">
       <h2>保存した曲一覧</h2>
       <div v-for="(track, index) in tracks" :key="track.id" class="track-item">
-        <span>名前: {{ track.name }}</span>
+        <span>{{ track.name }}</span>
+        <div class="operation-button" @click="handleUpdate(track.id as number)">編集</div>
+        <div class="operation-button" @click="handleDeleteTrack(track.id as number)">削除</div>
         <button @click="stop" v-if="isPlaying && playingListIndex === index">
-          <Icon icon="mdi:stop-circle" width="24" height="24" color="darkorange" />
+          <Icon icon="mdi:stop-circle" width="36" height="36" color="darkorange" />
         </button>
         <button @click="handleStart(track, index)" v-else>
-          <Icon icon="mdi:play-circle" width="24" height="24" color="darkorange" />
+          <Icon icon="mdi:play-circle" width="36" height="36" color="darkorange" />
         </button>
-        <div @click="handleUpdate(track.id as number)">編集</div>
-        <div @click="handleDeleteTrack(track.id as number)">削除</div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.track-manager {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
+
 
 .track-item {
-  margin: 10px 0;
-  padding: 10px;
+  display: grid;
+  grid-template-columns: 6fr 1fr 1fr 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
 button {
-  margin: 0 5px;
-  padding: 5px 10px;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: white;
-}
-
-button[onclick*='delete'] {
-  background-color: #f44336;
-}
-
-button[onclick*='delete']:hover {
-  background-color: #da190b;
+.operation-button {
+  background-color: #ddd;
+  border-radius: 4px;
+  padding: 5px 10px;
+  text-align: center;
+  cursor: pointer;
 }
 </style>
