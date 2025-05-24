@@ -39,7 +39,7 @@ function buttonClick() {
 <style scoped>
 .cell {
   width: 30px;
-  height: 15px;
+  height: 30px;
   border: 1px solid #ddd;
   border-radius: 3px;
   background-color: #fff;

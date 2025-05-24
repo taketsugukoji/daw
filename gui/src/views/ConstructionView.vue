@@ -59,8 +59,8 @@ onUnmounted(() => {
 
 <template>
   <div class="container">
-    <h2>プロジェクト</h2>
     <div class="menu-container">
+      <h2>プロジェクト</h2>
       <button @click="start(track)">
         <Icon
           icon="mdi:play-circle"

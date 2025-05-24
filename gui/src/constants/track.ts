@@ -99,7 +99,7 @@ export const soundsPath = [
   '/sounds/kick.mp3',
 ] as const
 
-export const drumTypeLabel = ['CRASH', 'SHAKER', 'HAT', 'SNARE', 'KICK'] as const
+export const drumTypeImageSrc = ['/images/crash.png', '/images/shaker.png', '/images/hat.png', '/images/snare.png', '/images/kick.png'] as const
 
 export const selectWaveItems = [
   { name: '正弦波', value: 'sine' },

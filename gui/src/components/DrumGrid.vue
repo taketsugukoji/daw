@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { drumTypeLabel, soundsPath } from '@/constants/track.ts'
+import { drumTypeImageSrc, soundsPath } from '@/constants/track.ts'
 import { toggleIsActive } from '@/utils/track.ts'
 import DrumCell from '@/components/DrumCell.vue'
 
@@ -12,7 +12,7 @@ defineProps<{
 
 <template>
   <div v-for="(item, i) of pattern" :key="i" class="row-container">
-    <div class="drum-type">{{ drumTypeLabel[i] }}</div>
+    <img class="drum-type" :src="drumTypeImageSrc[i]" />
     <div v-for="(cell, x) of item" :key="x">
       <DrumCell
         :path="soundsPath[i]"
@@ -31,7 +31,7 @@ defineProps<{
 }
 .drum-type {
   width: 30px;
-  height: 15px;
+  height: 30px;
   font-size: 10px;
   font-weight: bold;
   text-align: center;
