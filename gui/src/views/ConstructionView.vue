@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import router from '@/router'
-import { createTrack, getTrack, updateTrack } from '@/Hooks/UseTracks.ts'
+import { useRouter } from 'vue-router'
+import { createTrack, getTrack, updateTrack } from '@/hooks/UseTracks.ts'
 import { defaultTrack, type Track } from '@/constants/track.ts'
 import { handleInstReset, handleChangeWave, toggleIsActive } from '@/utils/track.ts'
-import { usePlayer } from '@/Hooks/UsePlayer.ts'
+import { usePlayer } from '@/hooks/UsePlayer.ts'
 import NameForm from '@/components/NameForm.vue'
 import SynthGrid from '@/components/SynthGrid.vue'
 import WaveSelect from '@/components/WaveSelect.vue'
@@ -16,7 +16,6 @@ const route = useRoute()
 const id = route.params.id
 
 const track = ref<Track>(defaultTrack)
-
 const trackName = computed(() => track.value.name)
 
 const handleSetupData = async () => {
@@ -26,6 +25,8 @@ const handleSetupData = async () => {
 
 const { start, stop, isPlaying, currentStep, inst } = usePlayer()
 const { bass, piano } = inst
+
+const router = useRouter()
 
 const saveTrack = async (name: string) => {
   if (isPlaying.value) {
@@ -54,6 +55,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   handleInstReset(track.value, true, true, true)
+  track.value.name = ''
 })
 </script>
 
@@ -129,7 +131,7 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <div @click="handleInstReset(track, true, true, true)">all reset</div>
+    <div @click="handleInstReset(track, true, true, true)">ALL RESET</div>
   </div>
 </template>
 

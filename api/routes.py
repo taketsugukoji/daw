@@ -2,17 +2,17 @@ from fastapi import APIRouter
 from fastapi.params import Depends
 from sqlalchemy.orm import Session
 
-from controller import (
+from api.controller import (
     create_track,
     update_track,
     delete_track,
     get_all_tracks,
     get_track_by_id,
 )
-from model import SessionLocal
-from schema.track_schema import TrackParams
+from api.model import SessionLocal
+from api.schema.track_schema import TrackParams
 
-router = APIRouter()  # インスタンス化が必要です
+router = APIRouter()
 
 
 def get_db():

@@ -67,14 +67,14 @@ export const usePlayer = () => {
       // piano
       track.instruments.synth.pattern.forEach((row, rowIndex) => {
         if (row[currentStep.value] === 1) {
-          piano.triggerAttackRelease(pianoNotes.slice().reverse()[rowIndex], '16n', time)
+          piano.triggerAttackRelease(pianoNotes[rowIndex], '16n', time)
         }
       })
 
       // bass
       track.instruments.bass.pattern.forEach((row, rowIndex) => {
         if (row[currentStep.value] === 1) {
-          bass.triggerAttackRelease(bassNotes.slice().reverse()[rowIndex], '16n', time)
+          bass.triggerAttackRelease(bassNotes[rowIndex], '16n', time)
         }
       })
       currentStep.value = (currentStep.value + 1) % 32

@@ -1,9 +1,9 @@
-name: Lint and Format API
+name: API CI
 
 on: [push]
 
 jobs:
-  lint-format:
+  lint-format-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,10 +16,14 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install black flake8
+          python -m pip install --upgrade pip
+          pip install -r api/requirements.txt
 
       - name: Run Black
-        run: black . --check --diff
+        run: black api/ --check --diff
 
       - name: Run Flake8
-        run: flake8 . --max-line-length=88
+        run: flake8 api/ --max-line-length=88
+
+      - name: Run Pytest
+        run: PYTHONPATH=. pytest api/tests

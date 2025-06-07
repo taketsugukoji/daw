@@ -17,7 +17,6 @@ const handleChange = () => {
 
 const handleSave = () => {
   if (!formValue.value.trim()) {
-    // TODO:vee-validateとか使得るようにしたい
     errorMessage.value = '曲名は1文字以上で入力してください'
     return
   }
@@ -36,8 +35,6 @@ onBeforeRouteLeave(() => {
   }
 })
 
-// データ取得までのタイムラグがあるため
-// TODO: いい感じに修正できるようにする
 watch(
   () => props.name,
   (newVal) => {

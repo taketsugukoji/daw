@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { ref, onMounted, type Ref, onUnmounted } from 'vue'
-import router from '@/router'
-import { deleteTrack, getAllTracks } from '@/Hooks/UseTracks.ts'
+import { deleteTrack, getAllTracks } from '@/hooks/UseTracks.ts'
 import { type Track } from '@/constants/track.ts'
-import { usePlayer } from '@/Hooks/UsePlayer.ts'
+import { usePlayer } from '@/hooks/UsePlayer.ts'
 import { Icon } from '@iconify/vue'
+import { useRouter } from 'vue-router'
 
 const tracks = ref<Track[]>([])
 const playingListIndex: Ref<null | number> = ref(null)
 
 const { start, stop, isPlaying } = usePlayer()
+
+const router = useRouter()
 
 const fetchTracks = async () => {
   const res = await getAllTracks()
@@ -67,8 +69,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-
-
 .track-item {
   display: grid;
   grid-template-columns: 6fr 1fr 1fr 1fr;

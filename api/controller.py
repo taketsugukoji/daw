@@ -1,8 +1,8 @@
 import json
 
 from sqlalchemy.orm import Session
-from model import create, update, delete, get_all, get_by_id
-from schema.track_schema import TrackParams
+from api.model import create, update, delete, get_all, get_by_id
+from api.schema.track_schema import TrackParams
 
 
 def create_track(db: Session, params: TrackParams):
