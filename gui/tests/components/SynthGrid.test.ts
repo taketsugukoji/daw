@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import SynthGrid from '../../../src/components/SynthGrid.vue'
-import SynthCell from '../../../src/components/SynthCell.vue'
+import SynthGrid from '@/components/SynthGrid.vue'
+import SynthCell from '@/components/SynthCell.vue'
 import { mockSynthInstance } from '../mock/tone'
 import type { PolySynth, Synth, SynthOptions } from 'tone'
 

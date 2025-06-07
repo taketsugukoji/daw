@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import KeyCell from '../../../src/components/KeyCell.vue'
+import KeyCell from '@/components/KeyCell.vue'
 
 describe('KeyCell.vue', () => {
   it('isBlack が false のとき、白鍵のクラスでレンダリングされる', () => {

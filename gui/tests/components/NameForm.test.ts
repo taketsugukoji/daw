@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import NameForm from '../../../src/components/NameForm.vue'
+import NameForm from '@/components/NameForm.vue'
 
 describe('NameForm.vue', () => {
   it('初期値が表示される', () => {

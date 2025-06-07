@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import WaveSelect from '../../../src/components/WaveSelect.vue'
-import { selectWaveItems } from '../../../src/constants/track'
+import WaveSelect from '@/components/WaveSelect.vue'
+import { selectWaveItems } from '@/constants/track'
 
 describe('WaveSelect.vue', () => {
   it('propsで渡されたwaveTypeがselectに反映されてる', () => {

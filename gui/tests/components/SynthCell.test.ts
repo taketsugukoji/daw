@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import SynthCell from '../../../src/components/SynthCell.vue'
+import SynthCell from '@/components/SynthCell.vue'
 import { setMock, triggerMock, mockSynthInstance } from '../mock/tone'
 
 describe('SynthCell.vue', () => {

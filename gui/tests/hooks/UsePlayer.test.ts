@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { usePlayer } from '../../../src/hooks/UsePlayer'
+import { usePlayer } from '@/hooks/UsePlayer'
 
 describe('usePlayer', () => {
   beforeEach(() => {

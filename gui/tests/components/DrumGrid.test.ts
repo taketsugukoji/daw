@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import DrumGrid from '../../../src/components/DrumGrid.vue'
-import DrumCell from '../../../src/components/DrumCell.vue'
-import { toggleIsActive } from '../../../src/utils/track'
+import DrumGrid from '@/components/DrumGrid.vue'
+import DrumCell from '@/components/DrumCell.vue'
+import { toggleIsActive } from '@/utils/track'
 
 vi.mock('@/utils/track.ts', () => ({
   toggleIsActive: vi.fn(),

@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { describe, it, expect, vi } from 'vitest'
 import * as Tone from 'tone'
-import DrumCell from '../../../src/components/DrumCell.vue'
+import DrumCell from '@/components/DrumCell.vue'
 
 vi.mock('tone', async () => {
   const tone = await import('../mock/tone')

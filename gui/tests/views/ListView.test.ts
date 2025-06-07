@@ -1,16 +1,16 @@
 import { flushPromises, mount } from '@vue/test-utils'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import ListView from '../../../src/views/ListView.vue'
-import * as UseTracks from '../../../src/hooks/UseTracks'
-import * as UsePlayer from '../../../src/hooks/UsePlayer'
+import ListView from '@/views/ListView.vue'
+import * as UseTracks from '@/hooks/UseTracks'
+import * as UsePlayer from '@/hooks/UsePlayer'
 import { createRouter, createWebHistory } from 'vue-router'
 
-vi.mock('../../../src/hooks/UseTracks.ts', () => ({
+vi.mock('@/hooks/UseTracks.ts', () => ({
   getAllTracks: vi.fn(),
   deleteTrack: vi.fn(),
 }))
 
-vi.mock('../../../src/hooks/UsePlayer.ts', () => ({
+vi.mock('@/hooks/UsePlayer.ts', () => ({
   usePlayer: vi.fn(),
 }))
 
