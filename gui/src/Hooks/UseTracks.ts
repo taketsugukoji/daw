@@ -45,7 +45,6 @@ export const getTrack = async (id: number) => {
 }
 
 export const getAllTracks = async () => {
-  // TODO: ページネーション機能つけたい
   try {
     const response = await fetch('http://localhost:8000/track')
     return response.json()

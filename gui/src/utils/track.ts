@@ -1,6 +1,6 @@
 import * as Tone from 'tone'
 import type { NonCustomOscillatorType } from 'tone/Tone/source/oscillator/OscillatorInterface.ts'
-import { selectWaveItems, type Track } from '@/constants/track.ts'
+import { type Track } from '@/constants/track.ts'
 
 export const toggleIsActive = (rowNumber: number, colNumber: number, targetPattern: number[][]) => {
   targetPattern[rowNumber][colNumber] = targetPattern[rowNumber][colNumber] === 1 ? 0 : 1
@@ -30,7 +30,7 @@ export const handleInstReset = (
 export const handleChangeWave = (
   type: NonCustomOscillatorType,
   targetTone: Tone.PolySynth<Tone.Synth<Tone.SynthOptions>>,
-  targetInst: 'synth' | 'bass', // TODO: enumにする
+  targetInst: 'synth' | 'bass', // 楽器の種類がさらに増えるなら enum にする
   track: Track,
 ) => {
   targetTone.set({ oscillator: { type } })

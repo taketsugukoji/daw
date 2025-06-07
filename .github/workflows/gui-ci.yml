@@ -1,0 +1,31 @@
+name: GUI CI
+
+on: [push]
+
+jobs:
+  lint-format-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: ./gui
+        run: npm ci
+
+      - name: Run ESLint
+        working-directory: ./gui
+        run: npx eslint . --ext .js,.ts,.vue
+
+      - name: Run Prettier
+        working-directory: ./gui
+        run: npx prettier . --check
+
+      - name: Run Unit Tests
+        working-directory: ./gui
+        run: npm run test:unit

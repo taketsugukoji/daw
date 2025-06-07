@@ -22,11 +22,11 @@ const emit = defineEmits<{
   <div class="column-container">
     <div v-for="(item, i) of pattern" :key="i" class="row-container">
       <div class="key-container">
-        <KeyCell :is-black="pianoNotes.slice().reverse()[i].includes('#')" />
+        <KeyCell :is-black="pianoNotes[i].includes('#')" />
       </div>
       <div v-for="(cell, x) of item" :key="x" :class="{ 'octave-boundary': i === 11 }">
         <SynthCell
-          :note="pianoNotes.slice().reverse()[i]"
+          :note="pianoNotes[i]"
           :is-active="cell === 1"
           :is-current-step="x === currentStep"
           :is-playing="isPlaying"
