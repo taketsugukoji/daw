@@ -131,7 +131,7 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <div @click="handleInstReset(track, true, true, true)">ALL RESET</div>
+    <div class="all-reset-button" @click="handleInstReset(track, true, true, true)">ALL RESET</div>
   </div>
 </template>
 
@@ -163,5 +163,9 @@ button {
 
 .icon.active {
   color: darkorange;
+}
+
+.all-reset-button {
+  cursor: pointer;
 }
 </style>
