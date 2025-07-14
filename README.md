@@ -96,15 +96,20 @@ GIF だと音声がないため別途 mp4 で動画も添付します
 
 api ディレクトリで：
 ```bash
-PYTHONPATH=.. uvicorn main:app --reload
+python -m pip install --upgrade pip  (python3 を使用している場合は先頭を python3 に変更)
+pip install -r requirements.txt　(pip3 を使用している場合は先頭を pip3 に変更)
+PYTHONPATH=.. python3 -m uvicorn main:app --reload
+
 ```
 
-### フロントエンド（GUI）の起動
-プロジェクトルートで：
+`http://127.0.0.1:8000` で起動します。
 
+### フロントエンド（GUI）の起動
 gui ディレクトリで：
 
 ```bash
 npm install
 npm run dev
 ```
+
+`http://localhost:5173/` で起動します。
